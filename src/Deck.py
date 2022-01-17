@@ -51,6 +51,8 @@ class Deck:
     def append(self, card):
         self.__list_of_cards.append(card)
 
+    def show_top(self):
+        return deepcopy(self.__list_of_cards[-1])
 
 """
     @property #check what talia.cards_left does!
@@ -67,4 +69,5 @@ if __name__ == "__main__":
     talia.peek()
     talia.extend(cards)
     # talia.append(Card(S, 10))
-    talia.peek()
+    talia.append("S10")
+    print(talia.show_top())
