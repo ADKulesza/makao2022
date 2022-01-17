@@ -3,6 +3,10 @@ from copy import deepcopy
 import random
 
 
+# I will change card representation to Card (from str) after the class is written
+# is it necessary to change shuffle to my own method?
+
+
 class Deck:
 
     def __init__(self, list_of_cards: list = []):
@@ -34,10 +38,19 @@ class Deck:
         print(self.__list_of_cards)
 
     def give(self, number: int = 1):
+        # is this possible to return unpacked list of cards?
         give_cards = []
         for i in range(number):
             give_cards.append(self.__list_of_cards.pop())
         return give_cards
+
+    def extend(self, c_list: list):
+        self.__list_of_cards.extend(reversed(c_list))
+
+    # def append(self, card: Card):
+    def append(self, card):
+        self.__list_of_cards.append(card)
+
 
 """
     @property #check what talia.cards_left does!
@@ -51,4 +64,7 @@ if __name__ == "__main__":
     talia.peek()
     cards = talia.give(3)
     print(cards)
+    talia.peek()
+    talia.extend(cards)
+    # talia.append(Card(S, 10))
     talia.peek()
