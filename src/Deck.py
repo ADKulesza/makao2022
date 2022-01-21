@@ -1,34 +1,38 @@
 from copy import deepcopy
-# from Card import Card
+from Card import Card
+from Card import ActionCard
+from Effect import Effect
 import random
-
-
-# I will change card representation to Card (from str) after the class is written
-# is it necessary to change shuffle to my own method?
 
 
 class Deck:
 
     def __init__(self, list_of_cards: list = []):
         self.__list_of_cards = list_of_cards
-        # for i in self.__list_of_cards:
-        #    if not isinstance(i, Card):
-        #        print(f"{i} is not an object Card!")
+        for i in self.__list_of_cards:
+            if not isinstance(i, Card):
+                print(f"{i} is not an object Card!")
 
     @staticmethod
-    def generate():
+    def generate(players: list):
         # C - clubs, D - diamonds, H - hearts, S - spades
         colors = ["C", "D", "H", "S"]
         symbols = ["A", "K", "Q", "J"]
+        effects = {"2": "extra_cards=2", "3": "extra_cards=3", "4": "pause=1", "J": f"players={players}",
+                   "A": f"players={players}", "HK": "extra_cards=5", "CK": "extra_cards=5 whos_next=-1"}
         for i in reversed(range(2, 11)):
             symbols.append(str(i))
         deck = []
         for c in colors:
             for s in symbols:
-                # deck.append(Card(c, s))
-                deck.append(c + s)
+                if s in effects.keys():
+                    e = Effect(effects[s])
+                else:
+                    e = Effect(effects[c+s])
+                deck.append(ActionCard(c, s, e))
         random.shuffle(deck)
-        print(deck)
+        for p in players:
+            p.take(deck.give(5))
         return Deck(deck)
 
     def shuffle(self):
@@ -47,12 +51,14 @@ class Deck:
     def extend(self, c_list: list):
         self.__list_of_cards.extend(reversed(c_list))
 
-    # def append(self, card: Card):
-    def append(self, card):
+    def append(self, card: Card):
         self.__list_of_cards.append(card)
 
     def show_top(self):
         return deepcopy(self.__list_of_cards[-1])
+
+    def cards_left(self):
+        return len(self.__list_of_cards)
 
 """
     @property #check what talia.cards_left does!
