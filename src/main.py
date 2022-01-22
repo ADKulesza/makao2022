@@ -26,9 +26,6 @@ while not after_makao:
     for crd in played_cards:
         e.combine(crd.effect)
     currently_plays = (currently_plays+e.whos_next ) % len(players)
-
-
-
     used_cards.extend(played_cards)
 
     if talia.cards_left == 0:
