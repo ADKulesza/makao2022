@@ -2,7 +2,7 @@
 
 currently_plays = 0
 players = []                # create players here
-talia = Deck.generate(players)     # create a standard deck of 52 cards
+talia = Deck.generate()     # create a standard deck of 52 cards
 used_cards = Deck([])       # table is an empty deck
 after_makao = False
 used_cards.append(talia.give(1))
@@ -11,11 +11,14 @@ while not after_makao:
     top_card = used_cards.show_top()
     # Player plays by returning a list of cards, that may be empty ....
     played_cards = players[currently_plays].play(top_card, e)
+    # zamiast play dałbym dwie funkcje -> think i action/play
     # .... and puts cards on a table
+    # jeśli dobiera to czy może z dobranych od razu rzucić? Albo gdy dobiera jedną?
+    # trzeba czyścić stakujący się efekt jeśli karty zostały dobrane lub pauzy przypisane do playera
     used_cards.extend(played_cards)
+    currently_plays = (currently_plays+e.whos_next ) % len(players)
     for crd in played_cards:
         e.combine(crd.effect)
-    currently_plays = (currently_plays+e.whos_next ) % len(players)
 
 
 used_cards.extend(played_cards)

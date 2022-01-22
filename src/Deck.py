@@ -14,12 +14,12 @@ class Deck:
                 print(f"{i} is not an object Card!")
 
     @staticmethod
-    def generate(players: list):
+    def generate():
         # C - clubs, D - diamonds, H - hearts, S - spades
         colors = ["C", "D", "H", "S"]
         symbols = ["A", "K", "Q", "J"]
-        effects = {"2": "extra_cards=2", "3": "extra_cards=3", "4": "pause=1", "J": f"players={players}",
-                   "A": f"players={players}", "HK": "extra_cards=5", "CK": "extra_cards=5 whos_next=-1"}
+        effects = {"2": "extra_cards=2", "3": "extra_cards=3", "4": "pause=1", "HK": "extra_cards=5",
+                   "CK": "extra_cards=5 whos_next=-1", "DK": "block=True", "SK": "block=True"}
         for i in reversed(range(2, 11)):
             symbols.append(str(i))
         deck = []
@@ -27,12 +27,12 @@ class Deck:
             for s in symbols:
                 if s in effects.keys():
                     e = Effect(effects[s])
-                else:
+                elif c+s in effects.keys():
                     e = Effect(effects[c+s])
-                deck.append(ActionCard(c, s, e))
+                else:
+                    e = Effect()
+                deck.append(ActionCard(c, s, e)) # czyli raczej dać jedną klasę z efektem
         random.shuffle(deck)
-        for p in players:
-            p.take(deck.give(5))
         return Deck(deck)
 
     def shuffle(self):
@@ -60,11 +60,6 @@ class Deck:
     def cards_left(self):
         return len(self.__list_of_cards)
 
-"""
-    @property #check what talia.cards_left does!
-    def remaining_cards(self):
-        return deepcopy(self.__remaining_cards)
-"""
 
 if __name__ == "__main__":
     talia = Deck.generate()
@@ -74,6 +69,6 @@ if __name__ == "__main__":
     print(cards)
     talia.peek()
     talia.extend(cards)
-    # talia.append(Card(S, 10))
-    talia.append("S10")
+    talia.append(Card(S, 10))
+    # talia.append("S10")
     print(talia.show_top())

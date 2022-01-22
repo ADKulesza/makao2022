@@ -5,8 +5,6 @@ class Player:
 
     def __init__(self, cards: list, strategy: Strategy):
         self.__player_pause = 0
-        self.requested_color = None # zrobić settery zamiast pola publicznego
-        self.requested_symbol = None # setter zamiast pola publicznego
         self.__cards = cards
         self.__strategy = strategy
 
@@ -31,10 +29,23 @@ class Player:
         # pomyśleć nad królami do blokowania króli biorących
         pass
 
-    def take(self):
-        # only needed when function generate() gives 5 cards for everyone
+    def number_of_cards(self):
+        # needed for saying "makao" and stategy
         pass
 
     def peek(self):
         # needed if cheater or other player could see list of cards with small probability
         pass
+
+    def add_card(self):
+        # for cheater
+        pass
+
+    def hide_card(self):
+        # jeśli więcej niż 2 karty cheater może z pewnym prawdopodobieństwem schować jedną (usunąć z gry)
+        pass
+
+    def cheat(self):
+        # if player has pauses to wait (>=2) small probability to trick others
+        # (the bigger no of turns to wait the bigger chance), also for cheater
+        # elif player has cards to take, small probability to trick the number (-1 card to take)

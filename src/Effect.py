@@ -1,17 +1,18 @@
 from copy import deepcopy
 
 
+# can follow musi sprawdzać efekty! np. jeśli kolor wymagany to albo as albo joker albo ten kolor
+# podobnie z symbolem -> wtedy jopek
+# jeśli nie to w playerze by to musiało być
 class Effect:
 
     def __init__(self, **kwargs):
-        self.__card_color = kwargs.get('color',
-                                       None)  # dopisać funkcję request_color() do Card zmieniającą to pole - wywołanie tylko gdy to as?
-        self.__card_symbol = kwargs.get('symbol',
-                                        None)  # dopisać funkcję request_symbol() do Card zmieniającą to pole - wywołanie tylko gdy to jopek?
+        self.__card_color = kwargs.get('color', None)
+        self.__card_symbol = kwargs.get('symbol', None)
         self.__extra_cards = int(kwargs.get('extra_cards', 0))
         self.__pause = int(kwargs.get('pause', 0))
+        self.__block = kwargs.get('block', False)
         self.whos_next = int(kwargs.get('whos_next', 1))
-        self.__players_list = kwargs.get('players', None)
 
     def combine_effect(self, e: Effect):
         if e.whos_next == -1:
@@ -19,19 +20,15 @@ class Effect:
         else:
             self.whos_next = 1
 
-        if self.__players_list is None:
-            self.__players_list = e.__players_list
+        self.__card_color = e.__card_color
+        self.__card_symbol = e.__card_symbol
 
-        if e.card_color != None:
-            for p in self.__players_list:
-                p.requested_color = e.__card_color
-        elif e.card_symbol != None:
-            for p in self.__players_list:
-                p.requested_symbol = e.__card_symbol
-
-        self.__extra_cards += e.__extra_cards
+        if self.__block is True:
+            self.__extra_cards = 0
+        else:
+            self.__extra_cards += e.__extra_cards
+            self.__block = False
         self.__pause += e.__pause
-        # self.__players_list = None  - czy jest sens czyścić listę playerów?
 
     def clear(self):
         self.__extra_cards = 0
