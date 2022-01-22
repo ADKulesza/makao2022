@@ -9,6 +9,7 @@ class Player:
         self.__strategy = strategy
 
     def play(self, top_card, e):
+        # większość tych rzeczy poniżej może być w strategy lub zazłatwi to can_follow
         # można sprawdzić czy osoba przed tobą powiedziała makao (jeśli ma jedną kartę)
         #   - > jak nie powiedziała to bierze 5 kart
         # if self._player_pause != 0 --> next player and self.__player_pause -= 1
@@ -46,6 +47,7 @@ class Player:
         pass
 
     def cheat(self):
+        pass
         # if player has pauses to wait (>=2) small probability to trick others
         # (the bigger no of turns to wait the bigger chance), also for cheater
         # elif player has cards to take, small probability to trick the number (-1 card to take)

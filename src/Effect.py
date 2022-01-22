@@ -12,13 +12,13 @@ class Effect:
         self.__extra_cards = int(kwargs.get('extra_cards', 0))
         self.__pause = int(kwargs.get('pause', 0))
         self.__block = kwargs.get('block', False)
-        self.whos_next = int(kwargs.get('whos_next', 1))
+        self.__whos_next = int(kwargs.get('whos_next', 1))
 
     def combine_effect(self, e: Effect):
-        if e.whos_next == -1:
-            self.whos_next = -1
+        if e.__whos_next == -1:
+            self.__whos_next = -1
         else:
-            self.whos_next = 1
+            self.__whos_next = 1
 
         self.__card_color = e.__card_color
         self.__card_symbol = e.__card_symbol
@@ -49,3 +49,11 @@ class Effect:
     @card_symbol.setter
     def card_symbol(self, card_symbol):
         self.__card_symbol = card_symbol
+
+    @property
+    def whos_next(self):
+        return self.__whos_next
+
+    @whos_next.setter
+    def whos_next(self, whos_next):
+        self.__whos_next = whos_next
