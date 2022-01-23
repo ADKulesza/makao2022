@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import copy, deepcopy
 
 
 # can follow musi sprawdzać efekty! np. jeśli kolor wymagany to albo as albo joker albo ten kolor
@@ -44,7 +44,7 @@ class Effect:
 
     @property
     def card_symbol(self):
-        return deepcopy(self.card_symbol)
+        return deepcopy(self.__card_symbol)
 
     @card_symbol.setter
     def card_symbol(self, card_symbol):
@@ -57,3 +57,7 @@ class Effect:
     @whos_next.setter
     def whos_next(self, whos_next):
         self.__whos_next = whos_next
+
+    @property
+    def extra_cards(self):
+        return copy(self.__extra_cards)
