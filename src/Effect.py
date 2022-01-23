@@ -1,9 +1,6 @@
 from copy import copy, deepcopy
 
 
-# can follow musi sprawdzać efekty! np. jeśli kolor wymagany to albo as albo joker albo ten kolor
-# podobnie z symbolem -> wtedy jopek
-# jeśli nie to w playerze by to musiało być
 class Effect:
 
     def __init__(self, **kwargs):
@@ -33,6 +30,12 @@ class Effect:
     def clear(self):
         self.__extra_cards = 0
         self.__pause = 0
+
+    def is_clear(self):
+        if self.__extra_cards == 0 and self.__pause == 0 and self.__card_color is None and self.__card_symbol is None:
+            return True
+        else:
+            return False
 
     @property
     def card_color(self):
