@@ -14,7 +14,7 @@ class Effect:
         self.__block = kwargs.get('block', False)
         self.__whos_next = int(kwargs.get('whos_next', 1))
 
-    def combine_effect(self, e: Effect):
+    def combine_effect(self, e):
         if e.__whos_next == -1:
             self.__whos_next = -1
         else:
