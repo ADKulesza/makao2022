@@ -1,6 +1,5 @@
 from copy import deepcopy
 from Card import Card
-from Card import ActionCard
 from Effect import Effect
 import random
 
@@ -20,7 +19,6 @@ class Deck:
         symbols = ["A", "K", "Q", "J"]
         effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}, "J": {"players": players},
                    "A": {"players": players}, "HK": {"extra_cards": 5}, "CK": {"extra_cards": 5, "whos_next": -1}}
-        # Należy dla zakresu wartości kart [5-10] zmienić generowanie kart
         for i in reversed(range(2, 11)):
             symbols.append(str(i))
         deck = []
@@ -32,7 +30,7 @@ class Deck:
                     e = Effect(**effects[c + s])
                 else:
                     e = Effect()
-                deck.append(ActionCard(c, s, e))
+                deck.append(Card(c, s, e))
         random.shuffle(deck)
         for p in players:
             p.take(deck.give(5))
