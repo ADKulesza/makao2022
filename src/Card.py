@@ -14,8 +14,9 @@ class Card:
     def __repr__(self):
         return self._color + self._value
 
-    def can_follow(self, next_card):
-        if self._value == 'Q':
+    def can_follow(self, next_card: Card, e: Effect):
+        #trzeba sprawdzić czy jest dobrze i czy to dodanie efektu na stosie jest ok
+        if self._value == 'Q' and e.is_clear():
             return True
 
         if self.value == next_card.value:
@@ -24,7 +25,7 @@ class Card:
         if self._effect.is_clear():
             if next_card.value == 'Q':
                 return True
-            if self.value == next_card.value:
+            elif self.value == next_card.value:
                 return True
 
         if self._value == '2':
@@ -35,7 +36,7 @@ class Card:
             else:
                 return False
 
-        if self._value == '3':
+        elif self._value == '3':
             if next_card.value == '3':
                 return True
             elif next_card.value == '2' and self.color == next_card.color:
@@ -43,7 +44,7 @@ class Card:
             else:
                 return False
 
-        if self._value == '4':
+        elif self._value == '4':
             if next_card.value == '4':
                 return True
             else:

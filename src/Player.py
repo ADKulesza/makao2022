@@ -1,4 +1,5 @@
 from Effect import Effect
+from Strategy import Strategy
 
 
 class Player:
@@ -7,6 +8,10 @@ class Player:
         self.__player_pause = 0
         self.__cards = cards
         self.__strategy = strategy
+
+    @property
+    def cards(self):
+        return self.__cards
 
     def play(self, top_card, e):
         # większość tych rzeczy poniżej może być w strategy lub zazłatwi to can_follow
