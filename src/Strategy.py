@@ -1,36 +1,59 @@
-# Strategy - definiująca zachowanie gracza; 
-# zaimplementowana w niej metoda best_move(crds: List[Card], e: Effect, top: Card) 
-# przyjmuje listę kart gracza, aktualny efekt gry oraz kartę na stole i zwraca kartę (karty) które ma zagrać gracz. 
-# Podstawowe klasy potomne to RandomStrategy i Human
-
-#
-
-#stategia agressive: gracz wybiera kartę, która ma najgorszy skutek dla przeciwników
-#czyli na przykład 2, 3 żeby musieli dobrac z talii
-#wybiera kolejno od najgorszej skutkiemm dla przeciwników: K, 3, 2, 4, J (?)
-#startegia random: g. wybiera kartę losowo spośród odpowiednich 
-#strategia quick: wybieranie kart tylko pod względem jak najszybszego pozbycia się ich
-#bez uwzględniania jaki przyniesie skutek dla innych graczy
-#czyli będzie sprawdzać jaką kartę wybrać żeby pozbyć się np w jednym ruchu jeszcze innych kart 
-#strategia dzban: zapomina wyłożyć więcej kart niż jedną, nawet, jeśli może 
-
 from abc import abstractmethod
 from Card import Card 
 from Effect import Effect
+import random
 
 class Strategy:
-
     def __init__(self):
         pass
 
     @abstractmethod
-    def best_move(self, crds: List[Card], e: Effect, top_card: Card):
-        return list_of_cards
-
-class agressive(Strategy):
-    def best_move(self, crds: List[Card], e: Effect, top_card: Card):
-        self.crds = crds
-        self.e = e
-        self.top_card = top_card
+    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+        pass
 
 
+class AggressiveStrategy(Strategy):
+    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+        playable_cards = [c for c in cards if c.can_follow(top_card, e)]
+        print(playable_cards)
+        if '2' or '3' in [c.value for c in playable_cards]:
+            card_to_play = playable_cards
+        else:
+            card_to_play = random.choice(playable_cards)
+
+        return card_to_play
+
+
+class RandomStrategy(Strategy):
+    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
+        multiple_cards = [c for c in playable_cards if c.value == top_card.value]
+        if len(multiple_cards) > 1:
+            multiple_cards_moves = [multiple_cards[0]]
+            for c in multiple_cards:
+                if len(multiple_cards_moves) == 1 and len(multiple_cards) >= 2:
+                    multiple_cards_moves.append([multiple_cards[0], multiple_cards[1]])
+                elif len(multiple_cards_moves) == 2 and len(multiple_cards) >= 3:
+                    multiple_cards_moves.append([multiple_cards[0], multiple_cards[1], multiple_cards[2]])
+                elif len(multiple_cards_moves) == 3 and len(multiple_cards) >= 4:
+                    multiple_cards_moves.append([multiple_cards[0], multiple_cards[1], multiple_cards[2], multiple_cards[3]])
+
+        possible_moves = playable_cards + multiple_cards_moves
+        print(possible_moves)
+        print(playable_cards)
+        return random.choice(possible_moves)
+
+
+colors = ["C", "D", "H", "S"]
+values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
+           , "HK": {"extra_cards": 5}, "CK": {"extra_cards": 5, "whos_next": -1}}
+
+player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()), Card("D", "3", Effect(**effects["3"]))]
+player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])), Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect())]
+
+s = RandomStrategy()
+# bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
+# print(bm1)
+bm2 = s.best_move(player2_cards, Effect(**effects["2"]), Card("C", "2", Effect(**effects["2"])))
+print(bm2)
