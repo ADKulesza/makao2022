@@ -22,6 +22,9 @@ class Card:
         elif self.value == next_card.value:
             return True
 
+        elif e.is_clear() and self.color == next_card.color:
+            return True
+
         elif (self._effect.is_clear() or e.is_clear()) and next_card.value == 'Q':
             return True
 
@@ -47,10 +50,10 @@ class Card:
             else:
                 return False
 
-        elif e.card_color is not None and (next_card._color == e.card_color or next_card._value == "A") :
+        elif e.card_color is not None and (next_card.color == e.card_color or next_card.value == "A") :
             return True
 
-        elif e.card_symbol is not None and (next_card._value == e.card_symbol or next_card._value == "J") :
+        elif e.card_symbol is not None and (next_card.value == e.card_symbol or next_card.value == "J") :
             return True
 
         else:
