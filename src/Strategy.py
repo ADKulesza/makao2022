@@ -14,7 +14,7 @@ class Strategy:
 
     def use_ace(self, ace: Card, card_color: str):
         # zmień pole w efekcie karty! -> liczba = random(4), symbol = slownik[liczba]
-        # jack.card_symbol = f"{symbol}", return ace !
+        # ace.card_symbol = f"{symbol}", return ace !
         pass
 
     def group_cards(self):
@@ -25,14 +25,14 @@ class Strategy:
         pass
 
     @abstractmethod
-    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
         # można wpisać tu metodę random i nie pisać klasy Random :))
         # wtedy wystarczy linia return random_card(cards)
         pass
 
 
 class AggressiveStrategy(Strategy):
-    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
         print(playable_cards)
         if 'HK' or 'CK' in [c.value for c in playable_cards]:
@@ -50,9 +50,15 @@ class AggressiveStrategy(Strategy):
 
         return card_to_play
 
-
 class RandomStrategy(Strategy):
-    def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
+        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
+        card_to_play = random.choice(playable_cards)
+
+        return card_to_play
+
+class UpgradedRandomStrategy(Strategy):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
         multiple_cards = [c for c in playable_cards if c.value == top_card.value]
         if len(multiple_cards) > 1:
