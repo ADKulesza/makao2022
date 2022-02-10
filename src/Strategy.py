@@ -35,8 +35,8 @@ class AggressiveStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
         print(playable_cards)
-        if 'HK' or 'CK' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == 'HK' or 'CK']
+        if 'K' in [c.value for c in playable_cards]:
+            card_to_play = [c for c in playable_cards if c.value == 'K' and (c.color == 'C' or c.color == 'H')]
         elif '3' in [c.value for c in playable_cards]:
             card_to_play = [c for c in playable_cards if c.value == '3']
         elif '2' in [c.value for c in playable_cards]:
@@ -47,7 +47,7 @@ class AggressiveStrategy(Strategy):
             card_to_play = [c for c in playable_cards if c.value == 'J']
         else:
             card_to_play = random.choice(playable_cards)
-
+            
         return card_to_play
 
 
@@ -79,6 +79,8 @@ class UpgradedRandomStrategy(Strategy):
 
         possible_moves = playable_cards + multiple_cards_moves
         return random.choice(possible_moves)
+                
+#        return random.choice(possible_moves)
 #        print(possible_moves)
 #        print(playable_cards)
 #        return move
@@ -97,11 +99,12 @@ effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
 player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()),
                  Card("D", "3", Effect(**effects["3"]))]
 player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])),
-                 Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()), Card("C", "6", Effect()), Card("H", "6", Effect())]
+                 Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()), 
+                 Card("C", "6", Effect()), Card("H", "6", Effect()), Card("C", "K", Effect(**effects["CK"]))]
 
-s = UpgradedRandomStrategy()
-#s = AggressiveStrategy()
+#s = UpgradedRandomStrategy()
+s = AggressiveStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)
-bm2 = s.best_move(player2_cards, Effect(), Card("D", "6", Effect()))
+bm2 = s.best_move(player2_cards, Effect(), Card("C", "6", Effect()))
 print(bm2)
