@@ -39,6 +39,8 @@ class Player:
         # needed for saying "makao" and stategy
         pass
 
+
+class Cheater(Player):
     def peek(self):
         # needed if cheater or other player could see list of cards with small probability
         pass

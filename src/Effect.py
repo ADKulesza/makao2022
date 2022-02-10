@@ -10,6 +10,15 @@ class Effect:
         self.__pause = int(kwargs.get('pause', 0))
         self.__block = kwargs.get('block', False)
         self.__whos_next = int(kwargs.get('whos_next', 1))
+        if self.__whos_next == 1:
+            self.__direction = "forward"
+        else:
+            self.__direction = "backward"
+
+    def __str__(self):
+        print(f"card_color_demand: {self.__card_color}\ncard_symbol_demand: {self.__card_symbol}\n"
+              f"extra_cards: {self.__extra_cards}\npause: {self.__pause}\nking_block: {self.__block}\n"
+              f"direction: {self.__direction}\n")
 
     def combine_effect(self, e):
         if e.__whos_next == -1:

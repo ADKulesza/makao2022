@@ -1,14 +1,33 @@
 from abc import abstractmethod
-from Card import Card 
+from Card import Card
 from Effect import Effect
 import random
+
 
 class Strategy:
     def __init__(self):
         pass
 
+    def use_jack(self, jack: Card, card_symbol: str):
+        # zmień pole w efekcie karty! -> liczba = random(5,10), jack.card_symbol = f"{liczba}", return jack !
+        pass
+
+    def use_ace(self, ace: Card, card_color: str):
+        # zmień pole w efekcie karty! -> liczba = random(4), symbol = slownik[liczba]
+        # jack.card_symbol = f"{symbol}", return ace !
+        pass
+
+    def group_cards(self):
+        # zrób listę zestawów kart, które można rzucić razem
+        pass
+
+    def random_card(self):
+        pass
+
     @abstractmethod
     def best_move(self, cards: list[Card], e: Effect, top_card: Card):
+        # można wpisać tu metodę random i nie pisać klasy Random :))
+        # wtedy wystarczy linia return random_card(cards)
         pass
 
 
@@ -44,7 +63,8 @@ class RandomStrategy(Strategy):
                 elif len(multiple_cards_moves) == 2 and len(multiple_cards) >= 3:
                     multiple_cards_moves.append([multiple_cards[0], multiple_cards[1], multiple_cards[2]])
                 elif len(multiple_cards_moves) == 3 and len(multiple_cards) >= 4:
-                    multiple_cards_moves.append([multiple_cards[0], multiple_cards[1], multiple_cards[2], multiple_cards[3]])
+                    multiple_cards_moves.append(
+                        [multiple_cards[0], multiple_cards[1], multiple_cards[2], multiple_cards[3]])
 
         possible_moves = playable_cards + multiple_cards_moves
         print(possible_moves)
@@ -55,12 +75,14 @@ class RandomStrategy(Strategy):
 colors = ["C", "D", "H", "S"]
 values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
-           , "HK": {"extra_cards": 5}, "CK": {"extra_cards": 5, "whos_next": -1}}
+    , "HK": {"extra_cards": 5}, "CK": {"extra_cards": 5, "whos_next": -1}}
 
-player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()), Card("D", "3", Effect(**effects["3"]))]
-player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])), Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect())]
+player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()),
+                 Card("D", "3", Effect(**effects["3"]))]
+player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])),
+                 Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect())]
 
-#s = RandomStrategy()
+# s = RandomStrategy()
 s = AggressiveStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)

@@ -15,20 +15,17 @@ class Card:
         return self._color + self._value
 
     def can_follow(self, next_card, e: Effect):
-        #trzeba sprawdzić czy jest dobrze i czy to dodanie efektu na stosie jest ok
-        if self._value == 'Q' and e.is_clear():
+        # trzeba sprawdzić czy jest dobrze i czy to dodanie efektu na stosie jest ok
+        if self._value == 'Q':
             return True
 
-        if self.value == next_card.value:
+        elif self.value == next_card.value:
             return True
 
-        if self._effect.is_clear():
-            if next_card.value == 'Q':
-                return True
-            elif self.value == next_card.value:
-                return True
+        elif (self._effect.is_clear() or e.is_clear()) and next_card.value == 'Q':
+            return True
 
-        if self._value == '2':
+        elif self._value == '2':
             if next_card.value == '2':
                 return True
             elif next_card.value == '3' and self.color == next_card.color:
@@ -50,6 +47,15 @@ class Card:
             else:
                 return False
 
+        elif e.card_color is not None and (next_card._color == e.card_color or next_card._value == "A") :
+            return True
+
+        elif e.card_symbol is not None and (next_card._value == e.card_symbol or next_card._value == "J") :
+            return True
+
+        else:
+            return False
+
     @property
     def color(self):
         return copy.copy(self._color)
@@ -62,6 +68,7 @@ class Card:
     def effect(self):
         # It's intentionally without copy
         return self._effect
+
 
 if __name__ == "__main__":
     pass
