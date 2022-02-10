@@ -8,25 +8,35 @@ class Strategy:
     def __init__(self):
         pass
 
-    def use_jack(self, jack: Card, card_symbol: str):
-        # zmień pole w efekcie karty! -> liczba = random(5,10), jack.card_symbol = f"{liczba}", return jack !
-        pass
+    def _use_jack(self, jack: Card, card_symbol: str = None):
+        if card_symbol is not None:
+            jack.card_symbol = card_symbol
+        else:
+            num = random.randint(5, 10)
+            jack.card_symbol = f"{num}"
+        # to ustawia tylko żądanie, ale kartę i tak trzeba przekazać returnem w danej strategii
 
-    def use_ace(self, ace: Card, card_color: str):
-        # zmień pole w efekcie karty! -> liczba = random(4), symbol = slownik[liczba]
-        # ace.card_symbol = f"{symbol}", return ace !
-        pass
+    def _use_ace(self, ace: Card, card_color: str = None):
+        if card_color is not None:
+            ace.card_symbol = card_color
+        else:
+            ace.card_symbol = random.choice(["C", "D", "H", "S"])
 
-    def group_cards(self):
+    def _group_cards(self, card_list: list):
         # zrób listę zestawów kart, które można rzucić razem
-        pass
+        grouped_cards = {}
+        for c in card_list:
+            if c not in grouped_cards.keys():
+                grouped_cards[f"{c.value}"] = []
+            grouped_cards[f"{c.value}"].append(c)
+        return grouped_cards
 
-    def random_card(self):
+    def _random_card(self):
         pass
 
     @abstractmethod
     def best_move(self, cards: list, e: Effect, top_card: Card):
-        # można wpisać tu metodę random i nie pisać klasy Random :))
+        # można wpisać tu metodę random i nie pisać klasy RandomStrategy :))
         # wtedy wystarczy linia return random_card(cards)
         pass
 
@@ -47,7 +57,7 @@ class AggressiveStrategy(Strategy):
             card_to_play = [c for c in playable_cards if c.value == 'J']
         else:
             card_to_play = random.choice(playable_cards)
-            
+
         return card_to_play
 
 
@@ -79,18 +89,22 @@ class UpgradedRandomStrategy(Strategy):
 
         possible_moves = playable_cards + multiple_cards_moves
         return random.choice(possible_moves)
-                
+
+
 #        return random.choice(possible_moves)
 #        print(possible_moves)
 #        print(playable_cards)
 #        return move
-        
 
-#class PatientStrategy(Strategy):
+
+# class PatientStrategy(Strategy):
 #    def best_move(self, cards: list, e: Effect, top_card: Card):
 #        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
 #        playable_cards = 
 
+
+
+"""
 colors = ["C", "D", "H", "S"]
 values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
@@ -99,12 +113,24 @@ effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
 player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()),
                  Card("D", "3", Effect(**effects["3"]))]
 player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])),
-                 Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()), 
+                 Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()),
                  Card("C", "6", Effect()), Card("H", "6", Effect()), Card("C", "K", Effect(**effects["CK"]))]
 
-#s = UpgradedRandomStrategy()
+# s = UpgradedRandomStrategy()
 s = AggressiveStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)
 bm2 = s.best_move(player2_cards, Effect(), Card("C", "6", Effect()))
 print(bm2)
+"""
+if __name__ == "__main__":
+
+    from Deck import Deck
+    talia = Deck.generate([])
+    talia.shuffle()
+    player1_cards = talia.give(5)
+    print(player1_cards)
+    karta_do_usuniecia = player1_cards[0]
+    print(karta_do_usuniecia)
+    player1_cards.remove(karta_do_usuniecia)
+    print(player1_cards)
