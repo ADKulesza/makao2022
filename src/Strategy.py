@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from Card import Card
 from Effect import Effect
+from Player import Player
 import random
 
 
@@ -26,8 +27,9 @@ class Strategy:
         # zrób listę zestawów kart, które można rzucić razem
         grouped_cards = {}
         for c in card_list:
-            if c not in grouped_cards.keys():
-                grouped_cards[f"{c.value}"] = []
+            if c.value not in grouped_cards.keys():
+                if c not in grouped_cards.keys():
+                    grouped_cards[f"{c.value}"] = []
             grouped_cards[f"{c.value}"].append(c)
         return grouped_cards
 
@@ -36,28 +38,57 @@ class Strategy:
 
     @abstractmethod
     def best_move(self, cards: list, e: Effect, top_card: Card):
+        playable_cards = [c for c in cards if c.can_follow(top_card, e)]
+        random_card = random.choice(playable_cards)
+        return random_card
         # można wpisać tu metodę random i nie pisać klasy RandomStrategy :))
         # wtedy wystarczy linia return random_card(cards)
-        pass
 
 
 class AggressiveStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
         print(playable_cards)
+        strat = Strategy()
+        ind = 0
+        grouped = strat._group_cards(cards)
         if 'K' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == 'K' and (c.color == 'C' or c.color == 'H')]
+            group = grouped['K']
+            for c in group:
+                if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group            
         elif '3' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == '3']
+            group = grouped['3']
+            for c in group:
+                if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group
         elif '2' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == '2']
+            group = grouped['2']
+            for c in group:
+                if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group
         elif '4' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == '4']
+            group = grouped['4']
+            for c in group:
+                if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group
         elif 'J' in [c.value for c in playable_cards]:
-            card_to_play = [c for c in playable_cards if c.value == 'J']
+            group = grouped['J']
+            for c in group:
+                if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group
         else:
             card_to_play = random.choice(playable_cards)
-
         return card_to_play
 
 
@@ -66,9 +97,7 @@ class RandomStrategy(Strategy):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
         print(playable_cards)
         card_to_play = random.choice(playable_cards)
-
         return card_to_play
-
 
 class UpgradedRandomStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
@@ -104,33 +133,42 @@ class UpgradedRandomStrategy(Strategy):
 
 
 
-"""
 colors = ["C", "D", "H", "S"]
 values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
     , "HK": {"extra_cards": 5}, "CK": {"extra_cards": 5, "whos_next": -1}}
-
 player1_cards = [Card("C", "2", Effect(**effects["2"])), Card("C", "8", Effect()),
                  Card("D", "3", Effect(**effects["3"]))]
 player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(**effects["2"])),
                  Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()),
-                 Card("C", "6", Effect()), Card("H", "6", Effect()), Card("C", "K", Effect(**effects["CK"]))]
-
+                 Card("C", "6", Effect()), Card("H", "6", Effect()), Card("C", "K", Effect(**effects["CK"])),
+                 Card("H", "K", Effect(**effects["HK"]))]
+# s = UpgradedRandomStrategy()
+#s = Strategy()
 # s = UpgradedRandomStrategy()
 s = AggressiveStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)
-bm2 = s.best_move(player2_cards, Effect(), Card("C", "6", Effect()))
+bm2 = s.best_move(player2_cards, Effect(), Card("D", "6", Effect()))
 print(bm2)
-"""
+#print(player2_cards)
+#karta_do_usuniecia = player2_cards[1]
+#player2_cards.remove(karta_do_usuniecia)
+#print(player2_cards)
+#grouped = s._group_cards(player2_cards)
+#print(grouped)
+#print(grouped['2'])
+
+
 if __name__ == "__main__":
 
     from Deck import Deck
     talia = Deck.generate([])
     talia.shuffle()
     player1_cards = talia.give(5)
-    print(player1_cards)
+    #print(player1_cards)
     karta_do_usuniecia = player1_cards[0]
-    print(karta_do_usuniecia)
+    #print(karta_do_usuniecia)
     player1_cards.remove(karta_do_usuniecia)
-    print(player1_cards)
+    #print(player1_cards)
+    
