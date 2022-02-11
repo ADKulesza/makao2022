@@ -1,60 +1,68 @@
 from Effect import Effect
 from Strategy import Strategy
-
+from Deck import Deck
 
 class Player:
 
-    def __init__(self, cards: list, strategy: Strategy):
+    def __init__(self, name,  cards: list, strategy: Strategy):
         self.__player_pause = 0
         self.__cards = cards
         self.__strategy = strategy
+        self.__player_name = name
+
+    def __len__(self):
+        return len(self.__cards)
 
     @property
-    def cards(self):
-        return self.__cards
+	def strategy(self):
+		return self.__strategy
+    
+    @property
+	def player_pause(self):
+		return self.__player_pause
+
+    @player_pause.setter
+    def player_pause(self, player_pause):
+        self.__player_pause = player_pause
+
+    @cards.setter
+    def cards(self, cards):
+        self.__cards = cards
 
     def play(self, top_card, e):
-        # większość tych rzeczy poniżej może być w strategy lub zazłatwi to can_follow
-        # można sprawdzić czy osoba przed tobą powiedziała makao (jeśli ma jedną kartę)
-        #   - > jak nie powiedziała to bierze 5 kart
-        # if self._player_pause != 0 --> next player and self.__player_pause -= 1
-        # elif received effect has e.__pause != 0 rzuć 4 lub ruch kolejnego gracza, a ty dopisz sobie
-        #   kolejki: self.__player_pause += e.__pause -1
-        # elif received effect has e.__extra_cards != 0 spr czy masz jakieś pasujące karty z efektem
-        #   biorącym (jak 2, 3 czy król karo lub nawet pik -> wtedy całość bierze poprzednia osoba, chyba
-        #   że ma czym się obronić)
-        # elif self._requested_color != None --> rzuć ten kolor lub asa i zarządaj koloru który masz -> request_color()
-        #   a na końcu zresetuj swoje pole self._requested_color na None
-        # elif self._requested_symbol != None --> rzuć tą figurę lub jopka i zarządaj posiadanej figury
-        #   niefunkcyjnej -> request_symbol() a na końcu zresetuj swoje pole self._requested_symbol na None
-        # else sprawdź które karty możesz rzucić i rzuć kartę(karty) według strategii lub weź jedną ze stosu kart
 
-        # po dobraniu kart lub dopisaniu sobie kolejek wyczyść kumulujący się efekt -> e.clear()
-        # jeśli masz jedną kartę powiedz makao
-        # jeśli dodajemy jokery to wtedy przyda się funkcja copy_effect w klasie Card albo nawet nowej klasie Joker
-        # pomyśleć nad królami do blokowania króli biorących
-        pass
+        playable_cards = []
+        Deck.show_top()
+        for _ in self.__cards:
+            if top_card.can_follow(_) == True:
+                playable_cards.append(_)
 
-    def number_of_cards(self):
-        # needed for saying "makao" and stategy
-        pass
+        if player_pause != 0:
+            player_pause -= 1
+            return []
+
+#        elif playable_cards == 0:
+#           self.__cards.extend(give())
+#        przechodzi do main?
+
+        else return strategy.best_move(playable_cards, e, top_card)
 
 
-class Cheater(Player):
-    def peek(self):
-        # needed if cheater or other player could see list of cards with small probability
-        pass
-
-    def add_card(self):
-        # for cheater
-        pass
-
-    def hide_card(self):
-        # jeśli więcej niż 2 karty cheater może z pewnym prawdopodobieństwem schować jedną (usunąć z gry)
-        pass
-
-    def cheat(self):
-        pass
-        # if player has pauses to wait (>=2) small probability to trick others
-        # (the bigger no of turns to wait the bigger chance), also for cheater
-        # elif player has cards to take, small probability to trick the number (-1 card to take)
+#class Cheater(Player):
+#    def peek(self):
+#        # needed if cheater or other player could see list of cards with small probability
+#        pass
+#
+#    def add_card(self):
+#        # for cheater
+#        pass
+#
+#    def hide_card(self):
+#        # jeśli więcej niż 2 karty cheater może z pewnym prawdopodobieństwem schować jedną (usunąć z gry)
+#        pass
+#
+#    def cheat(self):
+#        pass
+#        # if player has pauses to wait (>=2) small probability to trick others
+#        # (the bigger no of turns to wait the bigger chance), also for cheater
+#        # elif player has cards to take, small probability to trick the number (-1 card to take)
