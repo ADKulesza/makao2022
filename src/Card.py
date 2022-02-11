@@ -15,7 +15,7 @@ class Card:
         return self._color + self._value
 
     def can_follow(self, next_card, e: Effect):
-        # trzeba sprawdzić czy jest dobrze i czy to dodanie efektu na stosie jest ok
+        # trzeba sprawdzić czy jest dobrze
         if self._value == 'Q':
             return True
 

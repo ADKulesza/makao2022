@@ -8,7 +8,7 @@ players = []                # create players here
 talia = Deck.generate()     # create a standard deck of 52 cards
 used_cards = Deck([])       # table is an empty deck
 after_makao = False
-used_cards.append(talia.give(1))
+used_cards.append(talia.give(1)) # trzeba ogarnąć żeby nie była funkcyjna, więc w pętli trzeba to zrobić
 e = Effect()                # start from an empty effect
 while not after_makao:
     top_card = used_cards.show_top()
@@ -22,7 +22,7 @@ while not after_makao:
     if not played_cards:
         # dopisz stakujący efekt playerowi -> musi wziąć karty lub trzeba mu dopisać pauzy
         if e.extra_cards != 0:
-            players[currently_plays].take_cards(talia.give(e.extra_cards())
+            players[currently_plays].take_cards(talia.give(e.extra_cards()))
         elif e.pause != 0:
             players[currently_plays].pause = e.pause
         e.clear()
@@ -35,7 +35,7 @@ while not after_makao:
     used_cards.extend(played_cards)
     for crd in played_cards:
         e.combine_effect(crd.effect)
-    currently_plays = (currently_plays+e.whos_next ) % len(players)
+    currently_plays = (currently_plays + e.whos_next ) % len(players)
     used_cards.extend(played_cards)
     if talia.cards_left == 0:
         talia = used_cards[:-1].shuffle()
