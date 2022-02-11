@@ -67,9 +67,21 @@ class Effect:
         return self.__whos_next
 
     @whos_next.setter
-    def whos_next(self, whos_next):
+    def whos_next(self, whos_next: int):
         self.__whos_next = whos_next
 
     @property
     def extra_cards(self):
-        return copy(self.__extra_cards)
+        return self.__extra_cards
+
+    @extra_cards.setter
+    def extra_cards(self, extra_cards: int):
+        self.__extra_cards = extra_cards
+
+    @property
+    def pause(self):
+        return self.__pause
+
+    @pause.setter
+    def pause(self, pause: int):
+        self.__pause = pause
