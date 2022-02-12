@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from Card import Card
 from Effect import Effect
-from Player import Player
 import random
 
 
