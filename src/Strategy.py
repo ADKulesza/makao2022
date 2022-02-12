@@ -23,7 +23,6 @@ class Strategy:
             ace.card_symbol = random.choice(["C", "D", "H", "S"])
 
     def _group_cards(self, card_list: list):
-        # zrób listę zestawów kart, które można rzucić razem
         grouped_cards = {}
         for c in card_list:
             if c.value not in grouped_cards.keys():
@@ -47,12 +46,9 @@ class Strategy:
 class AggressiveStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
-#        print(playable_cards)
         strat = Strategy()
         ind = 0
         grouped = strat._group_cards(cards)
-        print(grouped)
-#        print(len(grouped['2']))
         if 'K' in [c.value for c in playable_cards]:
             group = grouped['K']
             for c in group:
@@ -96,7 +92,6 @@ class AggressiveStrategy(Strategy):
 class RandomStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
-        print(playable_cards)
         card_to_play = random.choice(playable_cards)
         return card_to_play
 
@@ -121,30 +116,19 @@ class UpgradedRandomStrategy(Strategy):
         return random.choice(possible_moves)
 
 
-#        return random.choice(possible_moves)
-#        print(possible_moves)
-#        print(playable_cards)
-#        return move
-
-''' Klasa PatientStrategy to odwrotnosc klasy QuickStrategy. Moze wydawac sie to absurdalne, ze schodzimy z najmniejszej
-ilosci kart, ale sprawia to, ze zostaja nam w reku karty, ktore z wiekszym prawdopodobienstwem rzucimy razem
-w nastepnym ruchu. W QuickStrategy po wyrzuceniu najwiekszej grupy kart zostajemy z duza iloscia pojedynczych kart,
-ktorych nie mozemy razem zagrac
-'''
+''' Klasa PatientStrategy to odwrotnosc klasy QuickStrategy. Moze wydawac sie to absurdalne, ze schodzimy z
+najmniejszej ilosci kart, ale sprawia to, ze zostaja nam w reku karty, ktore z wiekszym prawdopodobienstwem
+rzucimy razem w nastepnym ruchu. W QuickStrategy po wyrzuceniu najwiekszej grupy kart zostajemy
+z duza iloscia pojedynczych kart, ktorych nie mozemy razem zagrac, w prawdziwej grze w makao dziala dobrze :-)'''
+    
 class PatientStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
-        print(playable_cards)
         strat = Strategy()
         ind = 0
         grouped = strat._group_cards(cards)
-        len_list = []
         min_len = 5
-        keys_list = list(grouped)
-        key = keys_list[0]
-        print(key)
         for c in playable_cards:
-#            print(c.value)
              if len(grouped[c.value]) < min_len:
                  min_len = len(grouped[c.value])
                  ind = c.value
@@ -160,17 +144,11 @@ class PatientStrategy(Strategy):
 class QuickStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
-        print(playable_cards)
         strat = Strategy()
         ind = 0
         grouped = strat._group_cards(cards)
-        len_list = []
         max_len = 0
-        keys_list = list(grouped)
-        key = keys_list[0]
-        print(key)
         for c in playable_cards:
-#            print(c.value)
              if len(grouped[c.value]) > max_len:
                  max_len = len(grouped[c.value])
                  ind = c.value
@@ -183,9 +161,6 @@ class QuickStrategy(Strategy):
         return card_to_play
 
 
-
-
-
 colors = ["C", "D", "H", "S"]
 values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 effects = {"2": {"extra_cards": 2}, "3": {"extra_cards": 3}, "4": {"pause": 1}
@@ -196,6 +171,7 @@ player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(*
                  Card("H", "2", Effect(**effects["2"])), Card("D", "10", Effect()),
                  Card("C", "6", Effect()), Card("H", "6", Effect()), Card("C", "K", Effect(**effects["CK"])),
                  Card("H", "K", Effect(**effects["HK"]))]
+
 # s = UpgradedRandomStrategy()
 #s = Strategy()
 # s = UpgradedRandomStrategy()
@@ -204,13 +180,6 @@ s = QuickStrategy()
 # print(bm1)
 bm2 = s.best_move(player2_cards, Effect(), Card("D", "6", Effect()))
 print(bm2)
-#print(player2_cards)
-#karta_do_usuniecia = player2_cards[1]
-#player2_cards.remove(karta_do_usuniecia)
-#print(player2_cards)
-#grouped = s._group_cards(player2_cards)
-#print(grouped)
-#print(grouped['2'])
 
 
 if __name__ == "__main__":
