@@ -49,7 +49,7 @@ class AggressiveStrategy(Strategy):
         strat = Strategy()
         ind = 0
         grouped = strat._group_cards(cards)
-        if 'K' in [c.value for c in playable_cards]:
+        if 'K' in [c.value for c in playable_cards] and [c.color == 'C' or c.color == 'H' for c in playable_cards]:
             group = grouped['K']
             for c in group:
                 if c in playable_cards:
@@ -175,10 +175,11 @@ player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(*
 # s = UpgradedRandomStrategy()
 #s = Strategy()
 # s = UpgradedRandomStrategy()
-s = QuickStrategy()
+#s = QuickStrategy()
+s = AggressiveStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)
-bm2 = s.best_move(player2_cards, Effect(), Card("D", "6", Effect()))
+bm2 = s.best_move(player2_cards, Effect(), Card("C", "6", Effect()))
 print(bm2)
 
 
