@@ -47,10 +47,12 @@ class Strategy:
 class AggressiveStrategy(Strategy):
     def best_move(self, cards: list, e: Effect, top_card: Card):
         playable_cards = [c for c in cards if c.can_follow(top_card, e)]
-        print(playable_cards)
+#        print(playable_cards)
         strat = Strategy()
         ind = 0
         grouped = strat._group_cards(cards)
+        print(grouped)
+#        print(len(grouped['2']))
         if 'K' in [c.value for c in playable_cards]:
             group = grouped['K']
             for c in group:
@@ -124,11 +126,63 @@ class UpgradedRandomStrategy(Strategy):
 #        print(playable_cards)
 #        return move
 
+''' Klasa PatientStrategy to odwrotnosc klasy QuickStrategy. Moze wydawac sie to absurdalne, ze schodzimy z najmniejszej
+ilosci kart, ale sprawia to, ze zostaja nam w reku karty, ktore z wiekszym prawdopodobienstwem rzucimy razem
+w nastepnym ruchu. W QuickStrategy po wyrzuceniu najwiekszej grupy kart zostajemy z duza iloscia pojedynczych kart,
+ktorych nie mozemy razem zagrac
+'''
+class PatientStrategy(Strategy):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
+        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
+        print(playable_cards)
+        strat = Strategy()
+        ind = 0
+        grouped = strat._group_cards(cards)
+        len_list = []
+        min_len = 5
+        keys_list = list(grouped)
+        key = keys_list[0]
+        print(key)
+        for c in playable_cards:
+#            print(c.value)
+             if len(grouped[c.value]) < min_len:
+                 min_len = len(grouped[c.value])
+                 ind = c.value
+        group = grouped[ind]
+        for c in group:
+            if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group  
+        return card_to_play
 
-# class PatientStrategy(Strategy):
-#    def best_move(self, cards: list, e: Effect, top_card: Card):
-#        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
-#        playable_cards = 
+
+class QuickStrategy(Strategy):
+    def best_move(self, cards: list, e: Effect, top_card: Card):
+        playable_cards = list([c for c in cards if c.can_follow(top_card, e)])
+        print(playable_cards)
+        strat = Strategy()
+        ind = 0
+        grouped = strat._group_cards(cards)
+        len_list = []
+        max_len = 0
+        keys_list = list(grouped)
+        key = keys_list[0]
+        print(key)
+        for c in playable_cards:
+#            print(c.value)
+             if len(grouped[c.value]) > max_len:
+                 max_len = len(grouped[c.value])
+                 ind = c.value
+        group = grouped[ind]
+        for c in group:
+            if c in playable_cards:
+                    ind = group.index(c)
+                    group[ind], group[0] = group[0], group[ind]
+            card_to_play = group  
+        return card_to_play
+
+
 
 
 
@@ -145,7 +199,7 @@ player2_cards = [Card("S", "2", Effect(**effects["2"])), Card("D", "2", Effect(*
 # s = UpgradedRandomStrategy()
 #s = Strategy()
 # s = UpgradedRandomStrategy()
-s = AggressiveStrategy()
+s = QuickStrategy()
 # bm1 = s.best_move(player1_cards, Effect(**effects["2"]), Card("D", "2", Effect(**effects["2"])))
 # print(bm1)
 bm2 = s.best_move(player2_cards, Effect(), Card("D", "6", Effect()))
