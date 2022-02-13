@@ -17,6 +17,8 @@ class Player:
     def __len__(self):
         return len(self.__cards)
 
+
+
     @property
     def strategy(self):
         return self.__strategy
@@ -36,20 +38,25 @@ class Player:
 
     def play(self, top_card, e):
         playable_cards = []
+        played_cards = []
         for _ in self.cards:
             if top_card.can_follow(_) == True:
                 playable_cards.append(_)
 
         if self.player_pause != 0:
             self.player_pause -= 1
-            return []
+            return played_cards
+
 
         #        elif playable_cards == 0:
         #           self.__cards.extend(give())
         #        przechodzi do main?
 
         else:
-            return self.strategy.best_move(playable_cards, e, top_card)
+            return played_cards.extend(self.strategy.best_move(playable_cards, e, top_card))
+
+        for _ in played_cards:
+            self.__cards.remove(_)
 
 # class Cheater(Player):
 #    def peek(self):
