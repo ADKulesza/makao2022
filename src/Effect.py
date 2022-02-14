@@ -6,7 +6,7 @@ class Effect:
     def __init__(self, **kwargs):
         self.__card_color = kwargs.get('color', None)
         self.__card_symbol = kwargs.get('symbol', None)
-        self.__extra_cards = int(kwargs.get('extra_cards', 0))
+        self.__extra_cards = int(kwargs.get('extra_cards', 1))
         self.__pause = int(kwargs.get('pause', 0))
         self.__block = kwargs.get('block', False)
         self.__whos_next = int(kwargs.get('whos_next', 1))
@@ -16,9 +16,12 @@ class Effect:
             self.__direction = "backward"
 
     def __str__(self):
-        print(f"card_color_demand: {self.__card_color}\ncard_symbol_demand: {self.__card_symbol}\n"
-              f"extra_cards: {self.__extra_cards}\npause: {self.__pause}\nking_block: {self.__block}\n"
-              f"direction: {self.__direction}\n")
+        e_str = ''.join([f"card_color_demand: {self.__card_color}\n",
+                 f"card_symbol_demand: {self.__card_symbol}\n",
+                 f"extra_cards: {self.__extra_cards}\n" f"pause: {self.__pause}\n",
+                 f"king_block: {self.__block}\n",
+                 f"direction: {self.__direction}\n"])
+        return e_str
 
     def combine_effect(self, e):
         if e.__whos_next == -1:
@@ -41,7 +44,7 @@ class Effect:
         self.__pause = 0
 
     def is_clear(self):
-        if self.__extra_cards == 0 and self.__pause == 0 and self.__card_color is None and self.__card_symbol is None:
+        if self.__extra_cards == 1 and self.__pause == 0 and self.__card_color is None and self.__card_symbol is None:
             return True
         else:
             return False
@@ -85,3 +88,4 @@ class Effect:
     @pause.setter
     def pause(self, pause: int):
         self.__pause = pause
+

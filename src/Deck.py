@@ -12,8 +12,11 @@ class Deck:
             if not isinstance(i, Card):
                 print(f"{i} is not an object Card!")
 
+    def __repr__(self):
+        return str(self.__list_of_cards)
+
     @staticmethod
-    def generate(players: list):
+    def generate():
         # C - clubs, D - diamonds, H - hearts, S - spades
         colors = ["C", "D", "H", "S"]
         symbols = ["A", "K", "Q", "J"]
@@ -31,7 +34,7 @@ class Deck:
                 else:
                     e = Effect()
                 deck.append(Card(c, s, e))
-        # random.shuffle(deck)
+        random.shuffle(deck)
         return Deck(deck)
 
     def shuffle(self):
@@ -59,15 +62,19 @@ class Deck:
     def cards_left(self):
         return len(self.__list_of_cards)
 
+    def get_start_card(self):
+        i = 0
+        card_value = self.__list_of_cards[i].value
+        non_action = [str(val) for val in range(5, 11)]
+        while card_value not in non_action:
+            i += 1
+            card_value = self.__list_of_cards[i].value
+
+        return self.__list_of_cards.pop(i)
+
+    def leave_only_one(self):
+        self.__list_of_cards.reverse()
+        return self.give(self.cards_left() - 1)
 
 if __name__ == "__main__":
-    talia = Deck.generate([])
-    talia.peek()
-    talia.shuffle()
-    talia.peek()
-    cards = talia.give(3)
-    print(cards)
-    talia.peek()
-    talia.extend(cards)
-    # talia.append(Card(S, 10))
-    print(talia.show_top())
+    pass
