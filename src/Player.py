@@ -62,28 +62,3 @@ class Player:
             self.__cards.remove(card)
 
         return played_cards
-
-        # else:
-        #     return played_cards.extend(self.strategy.best_move(playable_cards, e, top_card))
-
-        # for _ in played_cards:
-        #     self.__cards.remove(_)
-
-# class Cheater(Player):
-#    def peek(self):
-#        # needed if cheater or other player could see list of cards with small probability
-#        pass
-#
-#    def add_card(self):
-#        # for cheater
-#        pass
-#
-#    def hide_card(self):
-#        # jeśli więcej niż 2 karty cheater może z pewnym prawdopodobieństwem schować jedną (usunąć z gry)
-#        pass
-#
-#    def cheat(self):
-#        pass
-#        # if player has pauses to wait (>=2) small probability to trick others
-#        # (the bigger no of turns to wait the bigger chance), also for cheater
-#        # elif player has cards to take, small probability to trick the number (-1 card to take)

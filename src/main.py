@@ -1,18 +1,20 @@
 from Deck import Deck
 from Effect import Effect
 from Player import Player
-from Strategy import RandomStrategy
+from Strategy import RandomStrategy, AggressiveStrategy, UpgradedRandomStrategy, PatientStrategy, QuickStrategy
 import random
 
-
-currently_plays = 0
 deck = Deck.generate()  # create a standard deck of 52 cards
 players = []  # create players here
-number_of_players = 2
+number_of_players = 4
+strategies = [RandomStrategy, AggressiveStrategy,
+              UpgradedRandomStrategy, PatientStrategy, QuickStrategy]
+
 for i in range(1, number_of_players + 1):
-    # TODO losowa strategia
-    new_player = Player(str(i), deck.give(5), RandomStrategy())
+    strategy = random.choice(strategies)()
+    new_player = Player(str(i), deck.give(5), strategy)
     players.append(new_player)
+    print(f'playeer {i} has {strategy}')
 
 used_cards = Deck([])
 used_cards.append(deck.get_start_card())
@@ -20,11 +22,12 @@ top_card = used_cards.show_top()
 after_makao = False
 e = Effect()  # start from an empty effect
 
+currently_plays = 0
 i = 0
 while not after_makao:
 
     current_player = players[currently_plays]
-    print('\n[!] turn:', i, ', player:', current_player)
+    print('\n[!] turn:', i, '| player:', current_player, '| left cards:', len(current_player))
     print('active effect:\n', e)
     print('table', used_cards)
 
@@ -33,6 +36,9 @@ while not after_makao:
         to_deck_cards = used_cards.leave_only_one()
         random.shuffle(to_deck_cards)
         deck.extend(to_deck_cards)
+        if deck.cards_left() < e.extra_cards:
+            print('Not enough cards in deck!')
+            e.extra_cards = deck.cards_left()
 
     # Checking what a player can do
     play_card = current_player.play(top_card, e)
@@ -59,11 +65,12 @@ while not after_makao:
             print(f"!!! player {current_player} wins !!!")
             break
 
-        # If any effect is clear then combine effects
+        # If effect is not clear then combine effects
         if e.is_clear() is False:
+            # TU jest coś nie tak
             print('[!!] activate trap card')
             e.combine_effect(top_card.effect)
-        # If effect is not clear it means the player has been punished
+        # If effect is clear it means the player has been punished
         else:
             e = top_card.effect
 

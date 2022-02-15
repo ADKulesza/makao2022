@@ -17,10 +17,10 @@ class Effect:
 
     def __str__(self):
         e_str = ''.join([f"card_color_demand: {self.__card_color}\n",
-                 f"card_symbol_demand: {self.__card_symbol}\n",
-                 f"extra_cards: {self.__extra_cards}\n" f"pause: {self.__pause}\n",
-                 f"king_block: {self.__block}\n",
-                 f"direction: {self.__direction}\n"])
+                         f"card_symbol_demand: {self.__card_symbol}\n",
+                         f"extra_cards: {self.__extra_cards}\n" f"pause: {self.__pause}\n",
+                         f"king_block: {self.__block}\n",
+                         f"direction: {self.__direction}\n"])
         return e_str
 
     def combine_effect(self, e):
@@ -29,10 +29,12 @@ class Effect:
         else:
             self.__whos_next = 1
 
-        self.__card_color = e.__card_color
-        self.__card_symbol = e.__card_symbol
+        if e.__card_color is not None or e.__card_symbol is not None:
+            self.__card_color = e.__card_color
+            self.__card_symbol = e.__card_symbol
+            self.__extra_cards = 1
 
-        if self.__block is True:
+        elif self.__block is True:
             self.__extra_cards = 0
         else:
             self.__extra_cards += e.__extra_cards
@@ -44,7 +46,8 @@ class Effect:
         self.__pause = 0
 
     def is_clear(self):
-        if self.__extra_cards == 1 and self.__pause == 0 and self.__card_color is None and self.__card_symbol is None:
+        if self.__extra_cards in [0,
+                                  1] and self.__pause == 0 and self.__card_color is None and self.__card_symbol is None:
             return True
         else:
             return False
@@ -88,4 +91,3 @@ class Effect:
     @pause.setter
     def pause(self, pause: int):
         self.__pause = pause
-

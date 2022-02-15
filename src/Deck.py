@@ -76,5 +76,6 @@ class Deck:
         self.__list_of_cards.reverse()
         return self.give(self.cards_left() - 1)
 
+
 if __name__ == "__main__":
     pass
